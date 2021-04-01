@@ -7,8 +7,15 @@ class ShelfChanger extends React.Component {
         shelves: PropsTypes.array.isRequired,
         onChange: PropsTypes.func
     }
+    state = {
+        selectedShelf: this.props.shelf
+    }
 
     changeHandle = (value) => {
+        this.setState(() => ({
+            selectedShelf: value
+        }));
+
         if (typeof this.props.onChange === 'function') {
             this.props.onChange(value);
         }
@@ -17,7 +24,7 @@ class ShelfChanger extends React.Component {
     render() {
         return (
             <div className="book-shelf-changer">
-                <select value={this.props.shelf} onChange={(e) => this.changeHandle(e.target.value)}>
+                <select value={this.state.selectedShelf} onChange={(e) => this.changeHandle(e.target.value)}>
                     <option value="move" disabled>Move to...</option>
                     {this.props.shelves.map(shelf =>
                         <option key={shelf.id}

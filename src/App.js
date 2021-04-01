@@ -1,4 +1,5 @@
 import React from 'react'
+import * as BooksAPI from "./BooksAPI";
 import List from './pages/List'
 import Search from './pages/Search'
 
@@ -17,16 +18,27 @@ class BooksApp extends React.Component {
             { id: 'currentlyReading', title: 'Currently Reading' },
             { id: 'wantToRead', title: 'Want To Read' },
             { id: 'read', title: 'Read' }
-        ]
+        ],
+        books: []
+    }
+
+    getAllBooks = () => {
+        BooksAPI.getAll().then(books => this.setState(() => ({
+            books: books
+        })));
+    }
+
+    changeBookShelf = (book, shelf) => {
+        BooksAPI.update(book, shelf).then(res => this.getAllBooks());
     }
 
     render() {
         return (
             <div className="app">
                 {this.state.showSearchPage ? (
-                    <Search/>
+                    <Search onBookShelfChange={this.changeBookShelf} shelves={this.state.shelves} />
                 ) : (
-                    <List shelves={this.state.shelves}/>
+                    <List books={this.state.books} getAllBooks={this.getAllBooks} onBookShelfChange={this.changeBookShelf} shelves={this.state.shelves} />
                 )}
             </div>
         )

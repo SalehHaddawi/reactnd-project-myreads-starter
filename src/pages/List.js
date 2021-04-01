@@ -1,34 +1,21 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
 import Shelf from "../components/Shelf";
-import * as BooksAPI from "../BooksAPI";
 
 class List extends React.Component {
     static propTypes = {
-        shelves: PropsTypes.array.isRequired
-    }
-
-    state = {
-        books: []
+        shelves: PropsTypes.array.isRequired,
+        onBookShelfChange: PropsTypes.func.isRequired,
+        books: PropsTypes.array.isRequired,
+        getAllBooks: PropsTypes.func.isRequired
     }
 
     componentDidMount() {
-        this.getAllBooks();
-    }
-
-    getAllBooks = () => {
-        BooksAPI.getAll().then(books => this.setState(() => ({
-            books: books
-        })));
-    }
-
-    changeBookShelf = (book, shelf) => {
-        BooksAPI.update(book, shelf).then(res => this.getAllBooks());
+        this.props.getAllBooks();
     }
 
     render() {
-        const {shelves} = this.props;
-        const {books} = this.state;
+        const {shelves, books} = this.props;
 
         return (
             <div className="list-books">
@@ -38,7 +25,7 @@ class List extends React.Component {
                 <div className="list-books-content">
                     <div>
                         {shelves.map(shelf =>
-                            <Shelf id={shelf.id} onBookShelfChange={this.changeBookShelf} title={shelf.title} shelves={shelves} books={books} key={shelf.id} />
+                            <Shelf id={shelf.id} onBookShelfChange={this.props.onBookShelfChange} title={shelf.title} shelves={shelves} books={books} key={shelf.id} />
                         )}
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropsTypes from "prop-types";
+import {Link} from "react-router-dom";
 import Book from "../components/Book";
 import * as BooksAPI from "../BooksAPI";
 
@@ -40,14 +41,21 @@ class Search extends React.Component {
                     }));
                 });
             }, this.delay.time);
+
+            return;
         }
+
+        this.setState(() => ({
+            query: query,
+            books: []
+        }));
     }
 
     render() {
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <button className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</button>
+                    <Link className="close-search" to="/">Close</Link>
                     <div className="search-books-input-wrapper">
                         <input onChange={(e) => this.searchBooks(e.target.value.trim())} type="text" placeholder="Search by title or author"/>
                     </div>

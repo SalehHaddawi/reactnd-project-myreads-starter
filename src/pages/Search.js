@@ -53,8 +53,6 @@ class Search extends React.Component {
     }
 
     render() {
-        const searchShelves = [...this.props.shelves, {id: 'none', title: 'None'}];
-
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -66,7 +64,7 @@ class Search extends React.Component {
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {this.state.searchBooks.map(book =>
-                            <Book key={book.id} book={book} shelves={searchShelves} onBookShelfChange={this.props.onBookShelfChange} />
+                            <Book key={book.id} book={book} shelves={this.props.shelves} onBookShelfChange={this.props.onBookShelfChange} />
                         )}
                     </ol>
                 </div>

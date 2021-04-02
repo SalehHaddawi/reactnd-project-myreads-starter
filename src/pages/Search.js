@@ -7,11 +7,12 @@ import * as BooksAPI from "../BooksAPI";
 class Search extends React.Component {
     static propTypes = {
         shelves: PropsTypes.array.isRequired,
+        books: PropsTypes.array.isRequired,
         onBookShelfChange: PropsTypes.func.isRequired
     }
 
     state = {
-        books: [],
+        searchBooks: [],
         query: ''
     }
 
@@ -28,16 +29,16 @@ class Search extends React.Component {
 
             this.delay.timer = setTimeout(() => {
                 BooksAPI.search(query).then(books =>  {
-                    queryBooks = books;
+                    queryBooks = Array.isArray(books) ? books.map(book => {
+                        const myBook = this.props.books.find(b => b.id === book.id);
+                        book.shelf = myBook ? myBook.shelf : 'none';
 
-                    // error happened
-                    if (!Array.isArray(queryBooks)) {
-                        queryBooks = [];
-                    }
+                        return book;
+                    }) : [];
 
                     this.setState(() => ({
                         query: query,
-                        books: queryBooks
+                        searchBooks: queryBooks
                     }));
                 });
             }, this.delay.time);
@@ -47,11 +48,13 @@ class Search extends React.Component {
 
         this.setState(() => ({
             query: query,
-            books: []
+            searchBooks: []
         }));
     }
 
     render() {
+        const searchShelves = [...this.props.shelves, {id: 'none', title: 'None'}];
+
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -62,8 +65,8 @@ class Search extends React.Component {
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {this.state.books.map(book =>
-                            <Book key={book.id} book={book} shelves={this.props.shelves} onBookShelfChange={this.props.onBookShelfChange} />
+                        {this.state.searchBooks.map(book =>
+                            <Book key={book.id} book={book} shelves={searchShelves} onBookShelfChange={this.props.onBookShelfChange} />
                         )}
                     </ol>
                 </div>

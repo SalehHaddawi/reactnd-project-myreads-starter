@@ -11,10 +11,6 @@ class List extends React.Component {
         getAllBooks: PropsTypes.func.isRequired
     }
 
-    componentDidMount() {
-        this.props.getAllBooks();
-    }
-
     render() {
         const {shelves, books} = this.props;
 
@@ -26,7 +22,7 @@ class List extends React.Component {
                 <div className="list-books-content">
                     <div>
                         {shelves.map(shelf =>
-                            <Shelf id={shelf.id} onBookShelfChange={this.props.onBookShelfChange} title={shelf.title} shelves={shelves} books={books} key={shelf.id} />
+                            shelf.id !== 'none' && <Shelf id={shelf.id} onBookShelfChange={this.props.onBookShelfChange} title={shelf.title} shelves={shelves} books={books} key={shelf.id} />
                         )}
                     </div>
                 </div>

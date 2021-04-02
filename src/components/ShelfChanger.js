@@ -1,5 +1,6 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
+import ReactHtmlParser from 'react-html-parser';
 
 class ShelfChanger extends React.Component {
     static propTypes = {
@@ -28,9 +29,8 @@ class ShelfChanger extends React.Component {
                     <option value="move" disabled>Move to...</option>
                     {this.props.shelves.map(shelf =>
                         <option key={shelf.id}
-                                value={shelf.id}
-                                disabled={shelf.id === this.props.shelf} onClick={(e) => console.log(e.target)}>
-                            {shelf.title}
+                                value={shelf.id}>
+                            {shelf.title} {shelf.id === this.state.selectedShelf && ReactHtmlParser('&#10003;')}
                         </option>
                     )}
                 </select>

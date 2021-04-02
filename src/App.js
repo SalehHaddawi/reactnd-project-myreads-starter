@@ -11,9 +11,14 @@ class BooksApp extends React.Component {
         shelves: [
             { id: 'currentlyReading', title: 'Currently Reading' },
             { id: 'wantToRead', title: 'Want To Read' },
-            { id: 'read', title: 'Read' }
+            { id: 'read', title: 'Read' },
+            { id: 'none', title: 'None' },
         ],
         books: []
+    }
+
+    componentDidMount() {
+        this.getAllBooks();
     }
 
     getAllBooks = () => {
@@ -35,7 +40,7 @@ class BooksApp extends React.Component {
                 )} />
 
                 <Route path="/search" exact render={() => (
-                    <Search onBookShelfChange={this.changeBookShelf} shelves={this.state.shelves} />
+                    <Search books={this.state.books} onBookShelfChange={this.changeBookShelf} shelves={this.state.shelves} />
                 )}/>
             </div>
         )

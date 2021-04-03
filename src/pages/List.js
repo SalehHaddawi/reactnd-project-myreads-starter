@@ -11,6 +11,10 @@ class List extends React.Component {
         getAllBooks: PropsTypes.func.isRequired
     }
 
+    componentDidMount() {
+        this.props.getAllBooks();
+    }
+
     render() {
         const {shelves, books} = this.props;
 

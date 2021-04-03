@@ -1,7 +1,7 @@
 import React from 'react';
 import PropsTypes from "prop-types";
-import {Link} from "react-router-dom";
 import Book from "../components/Book";
+import SearchBar from "../components/SearchBar";
 import * as BooksAPI from "../BooksAPI";
 
 class Search extends React.Component {
@@ -16,32 +16,31 @@ class Search extends React.Component {
         query: ''
     }
 
-    delay = {
-        timer: setTimeout(null, 0),
-        time: 400
-    }
-
     searchBooks = (query) => {
+        this.setState(() => ({
+            query: query,
+        }));
+
         if (query !== '') {
             let queryBooks = [];
 
-            clearTimeout(this.delay.timer);
+            BooksAPI.search(query).then(books =>  {
+                queryBooks = Array.isArray(books) ? books.map(book => {
+                    const myBook = this.props.books.find(b => b.id === book.id);
+                    book.shelf = myBook ? myBook.shelf : 'none';
 
-            this.delay.timer = setTimeout(() => {
-                BooksAPI.search(query).then(books =>  {
-                    queryBooks = Array.isArray(books) ? books.map(book => {
-                        const myBook = this.props.books.find(b => b.id === book.id);
-                        book.shelf = myBook ? myBook.shelf : 'none';
+                    return book;
+                }) : [];
 
-                        return book;
-                    }) : [];
+                // if query changed, then ignore results
+                if (query !== this.state.query) {
+                    return;
+                }
 
-                    this.setState(() => ({
-                        query: query,
-                        searchBooks: queryBooks
-                    }));
-                });
-            }, this.delay.time);
+                this.setState(() => ({
+                    searchBooks: queryBooks
+                }));
+            });
 
             return;
         }
@@ -55,12 +54,7 @@ class Search extends React.Component {
     render() {
         return (
             <div className="search-books">
-                <div className="search-books-bar">
-                    <Link className="close-search" to="/">Close</Link>
-                    <div className="search-books-input-wrapper">
-                        <input onChange={(e) => this.searchBooks(e.target.value.trim())} type="text" placeholder="Search by title or author"/>
-                    </div>
-                </div>
+                <SearchBar thresh={400} onChange={this.searchBooks}/>
                 <div className="search-books-results">
                     <ol className="books-grid">
                         {this.state.searchBooks.map(book =>

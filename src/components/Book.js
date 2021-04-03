@@ -1,6 +1,7 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
 import ShelfChanger from "./ShelfChanger";
+import noCoverImg from '../images/no-cover.jpeg';
 
 class Book extends React.Component {
     static propTypes = {
@@ -14,7 +15,7 @@ class Book extends React.Component {
             return this.props.book.imageLinks.thumbnail || this.props.book.imageLinks.smallThumbnail
         }
 
-        return '';
+        return noCoverImg;
     }
 
     get authors() {

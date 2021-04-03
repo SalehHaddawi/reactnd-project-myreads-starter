@@ -16,7 +16,7 @@ class SearchBar extends React.Component {
 
             this.timer = setTimeout(() => {
                 this.props.onChange(query);
-            }, this.props.timer);
+            }, this.props.thresh);
         }
     }
 

@@ -42,10 +42,9 @@ class Search extends React.Component {
                 }
 
                 this.setState(() => ({
-                    searchBooks: queryBooks
+                    searchBooks: queryBooks,
+                    loading: false
                 }));
-
-                this.setState(() => ({loading: false}))
             });
 
             return;

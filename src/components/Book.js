@@ -1,6 +1,7 @@
 import React from 'react';
 import PropsTypes from 'prop-types';
 import ShelfChanger from "./ShelfChanger";
+import Loading from "./Loading";
 import noCoverImg from '../images/no-cover.jpeg';
 
 class Book extends React.Component {
@@ -8,6 +9,10 @@ class Book extends React.Component {
         book: PropsTypes.object.isRequired,
         shelves: PropsTypes.array.isRequired,
         onBookShelfChange: PropsTypes.func.isRequired
+    }
+
+    state = {
+        loading: false,
     }
 
     get cover() {
@@ -23,15 +28,19 @@ class Book extends React.Component {
     }
 
     changeBookShelf = (shelf) => {
-        this.props.onBookShelfChange(this.props.book, shelf);
+        this.setState(() => ({loading: true}));
+
+        this.props.onBookShelfChange(this.props.book, shelf)
+            .then(res => this.setState(() => ({loading: false})));
     }
 
     render() {
         const {book, shelves} = this.props;
 
         return (
-            <div className="book">
+            <div className={`book ${this.state.loading ? 'opacity-6' : ''}`}>
                 <div className="book-top">
+                    {this.state.loading && <Loading/>}
                     <div className="book-cover"
                          style={{width: 128, height: 193, backgroundImage: `url("${this.cover}")`}}/>
                     <ShelfChanger shelves={shelves} shelf={book.shelf || 'move'} onChange={this.changeBookShelf}/>

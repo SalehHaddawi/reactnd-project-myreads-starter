@@ -25,7 +25,8 @@ class SearchBar extends React.Component {
             <div className="search-books-bar">
                 <Link className="close-search" to="/">Close</Link>
                 <div className="search-books-input-wrapper">
-                    <input onChange={(e) => this.handleChange(e.target.value.trim())} type="search" placeholder="Search by title or author"/>
+                    <input onChange={(e) => this.handleChange(e.target.value.trim())} type="search"
+                           placeholder="Search by title or author"/>
                 </div>
             </div>
         );

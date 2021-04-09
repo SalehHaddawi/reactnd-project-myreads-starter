@@ -27,11 +27,12 @@ class Book extends React.Component {
         return this.props.book.authors || [];
     }
 
-    changeBookShelf = (shelf) => {
+    changeBookShelf = async (shelf) => {
         this.setState(() => ({loading: true}));
 
-        this.props.onBookShelfChange(this.props.book, shelf)
-            .then(res => this.setState(() => ({loading: false})));
+        await this.props.onBookShelfChange(this.props.book, shelf);
+
+        this.setState(() => ({loading: false}));
     }
 
     render() {

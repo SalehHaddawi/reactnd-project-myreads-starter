@@ -18,7 +18,7 @@ class Search extends React.Component {
         loading: false,
     }
 
-    searchBooks = (query) => {
+    searchBooks = async (query) => {
         this.setState(() => ({
             query: query,
         }));
@@ -28,24 +28,24 @@ class Search extends React.Component {
 
             this.setState(() => ({loading: true}));
 
-            BooksAPI.search(query).then(books => {
-                queryBooks = Array.isArray(books) ? books.map(book => {
-                    const myBook = this.props.books.find(b => b.id === book.id);
-                    book.shelf = myBook ? myBook.shelf : 'none';
+            const books = await BooksAPI.search(query);
 
-                    return book;
-                }) : [];
+            queryBooks = Array.isArray(books) ? books.map(book => {
+                const myBook = this.props.books.find(b => b.id === book.id);
+                book.shelf = myBook ? myBook.shelf : 'none';
 
-                // if query changed, then ignore results
-                if (query !== this.state.query) {
-                    return;
-                }
+                return book;
+            }) : [];
 
-                this.setState(() => ({
-                    searchBooks: queryBooks,
-                    loading: false
-                }));
-            });
+            // if query changed, then ignore results
+            if (query !== this.state.query) {
+                return;
+            }
+
+            this.setState(() => ({
+                searchBooks: queryBooks,
+                loading: false
+            }));
 
             return;
         }
